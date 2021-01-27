@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="C:\Users\bilal\Desktop\CS50 Web Programming with Python and JavaScript\Week 7\React\style.css">
+        
+    </head>
+    <body>
+        <div id="app" />
+        <script type="text/babel">
+
+
+        class App extends React.Component {
+
+            constructor(props) {
+                super(props);
+                this.state = {
+                    num1: 1, 
+                    num2: 1, 
+                    response: '',
+                    score: 0
+                };
+            }
+
+            render() {
+
+                //Check to see if the user has met the condition of winning the game (i.e. achieved a score of 10)
+                if (this.state.score === 10) {
+                    return (
+                        <div id="winner">
+                            You Won!
+                        </div>
+                    )
+                }
+
+    // See_Note_Above            
+    // I have added the below h3 tag for the purpose of checking that the onchange event handler is working correctly and as expected.
+    // Expected behaviour is that as we enter something in our input box, immediately the value of the "response" in our state is going 
+    // to be changed (which is going to be as a result of the updateResponse function we will call). 
+
+
+                return (
+                    <div>
+                        <div  id="problem">{this.state.num1} + {this.state.num2}</div>
+                        <input onKeyPress = {this.inputKeyPress} onChange = {this.updateResponse} type="text" value={this.state.response} />
+                        <h3 id="See_Note_Above">You just entered: '{this.state.response}'</h3>
+                        <div>Score: {this.state.score} </div>
+                    </div>
+                );
+            }
+
+            // The onChange event is trigerred first and the reason for this is that we are 
+            updateResponse = (event) => {
+                this.setState({
+                    response: event.target.value
+                });
+            }
+
+            inputKeyPress = (event) => {
+                // Check to see if the user pressed the ENTER key
+                if (event.key === 'Enter') {
+
+                    //Extract the user's input 
+                    const user_response = parseInt(this.state.response)
+
+                    //Check if the user's response is correct or not
+
+                    if (user_response === this.state.num1 + this.state.num2) {
+                        this.setState(state => ({
+                            score: state.score + 1,
+                            num1: Math.ceil(Math.random() * 10),
+                            num2: Math.ceil(Math.random() * 10),
+                            response: ''
+                        }));
+                    }
+
+                    //What to do when the user's response is incorrect
+                    else {
+                        this.setState(state => ({
+                            score: state.score - 1,
+                            response: ''
+                        }));
+                    }
+                }
+            }
+        }
+
+        ReactDOM.render(<App />, document.querySelector("#app"));
+        </script>
+    </body>
+</html>
